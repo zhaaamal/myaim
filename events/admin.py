@@ -2,6 +2,11 @@ from django.contrib import admin
 from .models import Event, EventMedia
 
 
+class EventMediaInline(admin.TabularInline):
+    model = EventMedia
+    extra = 1
+
+
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = ('name', 'event_type', 'location', 'start_time', 'end_time')
@@ -14,6 +19,7 @@ class EventAdmin(admin.ModelAdmin):
         ('Dates', {'fields': ('created_at', 'updated_at')}),
     )
     readonly_fields = ('created_at', 'updated_at')
+    inlines = [EventMediaInline]
 
 
 @admin.register(EventMedia)
@@ -22,3 +28,4 @@ class EventMediaAdmin(admin.ModelAdmin):
     search_fields = ('event__name', 'file_type')
     list_filter = ('file_type', 'uploaded_at')
     ordering = ('-uploaded_at',)
+
